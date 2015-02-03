@@ -1,0 +1,15 @@
+{
+    "name": "hoppinger/rails-connector",
+    "description": "This WordPress plugin makes it possible to connect WordPress with webhooks to a Rails app.",
+    "require": {
+        "aura/autoload": "2.0.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sebastiaan de Geus",
+            "email": "sebastiaan@hoppinger.com"
+        }
+    ],
+    "minimum-stability": "dev"
+}
