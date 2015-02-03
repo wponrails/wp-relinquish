@@ -1,6 +1,7 @@
 {
     "name": "hoppinger/rails-connector",
     "description": "This WordPress plugin makes it possible to connect WordPress with webhooks to a Rails app.",
+    "type": "wordpress-plugin",
     "require": {
         "aura/autoload": "2.0.0"
     },
