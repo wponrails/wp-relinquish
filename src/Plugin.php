@@ -54,19 +54,10 @@ class Plugin {
 
     $client = new Client();
 
-    if ( WP_ENV == 'development' ) {
-      $response = $client->post( RAILS_URL . "/wp-connector/{$post->post_type}/", array(
-          'body' => array( 'ID' => $post_id ),
-          'auth' => array( 'rails', 'kaiql918halqpxa' )
-        ) );
-
-    } else {
-      $response = $client->post( RAILS_URL . "/wp-connector/{$post->post_type}/", array(
-          'body' => array(
-            'ID' => $post_id
-          )
-        ) );
-    }
+    $response = $client->post( RAILS_URL . "/wp-connector/{$post->post_type}/", array(
+        'body' => array( 'ID' => $post_id ),
+        'auth' => array( 'rails', 'kaiql918halqpxa' )
+      ) );
 
     return true;
   }
