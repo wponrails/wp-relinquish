@@ -56,7 +56,6 @@ class Plugin {
 
     $response = $client->post( RAILS_URL . "/wp-connector/{$post->post_type}/", array(
         'body' => array( 'ID' => $post_id ),
-        'auth' => array( 'rails', 'kaiql918halqpxa' )
       ) );
 
     return true;
