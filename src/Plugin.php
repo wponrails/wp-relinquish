@@ -30,8 +30,8 @@ class Plugin {
     add_action( 'delete_post', array( $this, 'before_delete_post' ) );
 
     # hook attachments
-    add_action( 'edit_attachment', array( $this, 'save_post' ), 10, 3 );
-    add_action( 'add_attachment', array( $this, 'save_post' ), 10, 3 );
+    add_action( 'edit_attachment', array( $this, 'save_attachment' ) );
+    add_action( 'add_attachment', array( $this, 'save_attachment' ) );
   }
 
   public function synch_types() {
@@ -59,6 +59,36 @@ class Plugin {
     $client = new Client();
 
     $response = $client->post( RAILS_URL . "/wp-connector/{$post->post_type}/", array(
+        'body' => array( 'ID' => $post_id ),
+      ) );
+
+    return true;
+  }
+
+   public function save_attachment( $post_id ) {
+    $post = get_post( $post_id );
+
+    if ( $post->post_status == 'auto-draft' ) {
+      return false;
+    }
+
+    if ( wp_is_post_revision( $post_id ) ) {
+      return false;
+    }
+
+    if ( ! in_array( $post->post_type, $this->synched_types )  ) {
+      return false;
+    }
+
+    if ( $post->post_status == 'draft' ) {
+      return false;
+    }
+
+    $client = new Client();
+
+    $url = RAILS_URL . "/wp-connector/{$post->post_type}/";
+
+    $response = $client->post( $url, array(
         'body' => array( 'ID' => $post_id ),
       ) );
 
