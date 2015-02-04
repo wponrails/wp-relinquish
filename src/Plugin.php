@@ -30,8 +30,8 @@ class Plugin {
     add_action( 'delete_post', array( $this, 'before_delete_post' ) );
 
     # hook attachments
-    add_action( 'edit_attachment', array( $this, 'save_post' ) );
-    add_action( 'add_attachment', array( $this, 'save_post' ) );
+    add_action( 'edit_attachment', array( $this, 'save_post' ), 10, 3 );
+    add_action( 'add_attachment', array( $this, 'save_post' ), 10, 3 );
   }
 
   public function synch_types() {
