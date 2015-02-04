@@ -28,6 +28,10 @@ class Plugin {
     // add_action( 'wp_trash_post', array( $this, 'before_trash_post' ) );
     add_action( 'trashed_post', array( $this, 'after_trash_post' ) );
     add_action( 'delete_post', array( $this, 'before_delete_post' ) );
+
+    # hook attachments
+    add_action( 'edit_attachment', array( $this, 'save_post' ) );
+    add_action( 'add_attachment', array( $this, 'save_post' ) );
   }
 
   public function synch_types() {
