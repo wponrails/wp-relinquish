@@ -3,7 +3,8 @@
     "description": "This WordPress plugin makes it possible to connect WordPress with webhooks to a Rails app.",
     "type": "wordpress-plugin",
     "require": {
-        "aura/autoload": "2.0.0"
+        "aura/autoload": "2.0.0",
+        "guzzlehttp/guzzle": "~5.2.0"
     },
     "license": "MIT",
     "authors": [
