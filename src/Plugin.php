@@ -27,16 +27,7 @@ class Plugin {
 
     // only apply all the hooks if the endpoint url is correctly set
     if ( ! empty( $this->relinqish_to ) ) {
-      $this->filters();
       $this->actions();
-    }
-  }
-
-  public function filters() {
-    if ( defined( 'get_fields' ) ) {
-      add_filter( 'json_prepare_post', [
-        $this, 'wp_api_acf_json_prepare_post'
-        ], 10, 3 );
     }
   }
 
@@ -216,17 +207,6 @@ class Plugin {
   public function send_headers() {
     header( 'Access-Control-Allow-Origin: ' . $this->relinqish_to );
     header( 'Access-Control-Allow-Credentials: true' );
-  }
-
-
-  public function wp_api_acf_json_prepare_post( $_post, $post, $context ) {
-    $_post['acf_fields'] = [];
-
-    if ( $fields = get_fields( $post['ID'] ) ) {
-      $_post['acf_fields'] = $fields;
-    }
-
-    return $_post;
   }
 
 }

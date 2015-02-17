@@ -19,3 +19,19 @@ $loader->addPrefix( 'Hoppinger\WordPress\Relinquish', __DIR__ . '/src/' );
 
 // instantiate this plugin
 $relinquish_plugin = new \Hoppinger\WordPress\Relinquish\Plugin;
+
+// [TODO] find a place for this
+function wp_relinquish_json_prepare_post( $_post, $post ) {
+  if ( ! defined( 'get_fields ' ) ) {
+    return;
+  }
+
+  $_post['acf_fields'] = [];
+
+  if ( $fields = get_fields( $post['ID'] ) ) {
+    $_post['acf_fields'] = $fields;
+  }
+
+  return $_post;
+}
+add_filter( 'json_prepare_post', 'wp_relinquish_json_prepare_post', 10, 2 );
