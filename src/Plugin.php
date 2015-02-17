@@ -44,7 +44,7 @@ class Plugin {
     // send headers to allow the adminbar to be loaded above rails
     add_action( 'send_headers', [ $this, 'send_headers' ] );
 
-    add_action( 'plugins_loaded', [ $this, 'synch_types' ] );
+    add_action( 'plugins_loaded', [ $this, 'synch_post_types' ] );
 
     // content editing actions
     add_action( 'insert_post', [ $this, 'save_post' ], 10, 3 );
@@ -61,9 +61,9 @@ class Plugin {
     add_action( 'admin_notices', [ $this, 'admin_notices' ] );
   }
 
-  public function synch_types() {
+  public function synch_post_types() {
     $this->synched_types = apply_filters(
-      'wp_relinquish/synch_type',
+      'wp_relinquish/synch_post_types',
       $this->synched_types
     );
   }
