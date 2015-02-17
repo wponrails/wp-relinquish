@@ -1,6 +1,6 @@
 <?php
 
-namespace RailsConnector;
+namespace Hoppinger\WordPress\Relinquish;
 
 use GuzzleHttp\Client;
 

@@ -1,28 +1,26 @@
 <?php
 /*
-Plugin Name: Rails Connector
-Version: 0.1-alpha
-Description: PLUGIN DESCRIPTION HERE
-Author: YOUR NAME HERE
-Author URI: YOUR SITE HERE
-Plugin URI: PLUGIN SITE HERE
-Text Domain: rails-connector
+Plugin Name: WP Relinquish
+Version: 0.0.1-alpha
+Description:
+With this WordPress plugin a WP site can "relinquish" content  serving to an
+extertnal system, for instance a Rails application with the wp-connector gem.
+Author: Hoppinger
+Author URI: http://www.hoppinger.com
+Plugin URI: https://github.com/hoppinger/wp-relinquish
+Text Domain: wp-relinquish
 Domain Path: /languages
 */
 
-
-load_textdomain( 'rails-connector', __DIR__ . '/languages/' . WPLANG . '.mo' );
-
-define( 'RAILS_CONNECTOR_ROOT', __DIR__ );
-define( 'RAILS_CONNECTOR_URL', plugin_dir_url( __FILE__ ) );
+load_textdomain( 'wp-relinquis', __DIR__ . '/languages/' . WPLANG . '.mo' );
 
 // instantiate loader and register namespaces
 $loader = new \Aura\Autoload\Loader;
 $loader->register();
-$loader->addPrefix( 'RailsConnector', __DIR__ . '/src/' );
+$loader->addPrefix( 'Hoppinger\WordPress\Relinquish', __DIR__ . '/src/' );
 
 // instantiate this plugin
-$rc = new \RailsConnector\Plugin;
+$relinquish = new \Hoppinger\WordPress\Relinquish\Plugin;
 
 // set properties for the plugin
-$rc->textdomain = 'rails-connector';
+$relinquish->textdomain = 'wp-relinquis';
