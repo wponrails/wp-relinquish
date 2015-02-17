@@ -75,7 +75,7 @@ class Plugin {
 
     $client = new Client();
 
-    $response = $client->post( RELINQUISH_URL . "/wp-connector/{$post->post_type}/", [
+    $response = $client->post( $this->relinquish_url . "{$post->post_type}/", [
       'body' => [ 'ID' => $post_id ],
       ] );
 
@@ -103,7 +103,7 @@ class Plugin {
 
     $client = new Client();
 
-    $url = RELINQUISH_URL . "/wp-connector/{$post->post_type}/";
+    $url = $this->relinquish_url . "{$post->post_type}/";
 
     $response = $client->post( $url, [
       'body' => array( 'ID' => $post_id ),
@@ -125,7 +125,7 @@ class Plugin {
     }
 
     $client  = new Client();
-    $request = $client->createRequest( 'POST', RELINQUISH_URL . "/wp-connector/{$post->post_type}/" );
+    $request = $client->createRequest( 'POST', $this->relinquish_url . "{$post->post_type}/" );
     $request->getBody()->setField( 'ID', $post_id );
 
     try {
@@ -151,13 +151,13 @@ class Plugin {
     }
 
     $client = new Client();
-    $response = $client->delete( RELINQUISH_URL . "/wp-connector/{$post->post_type}/{$post_id}" );
+    $response = $client->delete( $this->relinquish_url . "/{$post->post_type}/{$post_id}" );
 
     return true;
   }
 
   public function send_headers() {
-    header( 'Access-Control-Allow-Origin: ' . RELINQUISH_URL );
+    header( 'Access-Control-Allow-Origin: ' . $this->relinquish_url );
     header( 'Access-Control-Allow-Credentials: true' );
   }
 
