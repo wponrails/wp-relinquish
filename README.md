@@ -10,6 +10,25 @@ This plugin provides the following functionality:
 
 Please refer to [the README of the wp-connector gem](https://github.com/hoppinger/wp-connector/blob/master/README.md) for a detailed explaination of *why* splitting "content serving" out of WP is a good idea, and *how* this is achieved.
 
+## Getting started
+
+The endpoint url where all webhooks will be fired to can be set in two different ways.
+
+Defining a constant:
+
+```
+  define( 'RELINQUISH_TO', 'http://example.com/' );
+```
+
+or add a filter:
+```
+  add_filter( 'wp_relinquish/relinqish_to', 'relinqish_to' );
+
+  function relinqish_to( $url ) {
+    return 'http://example.com/';
+  }
+```
+
 ## Contributing
 
 Please. You know the drill: create issue, fork, resolve issue, submit pull request.
