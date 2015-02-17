@@ -19,6 +19,3 @@ $loader->addPrefix( 'Hoppinger\WordPress\Relinquish', __DIR__ . '/src/' );
 
 // instantiate this plugin
 $relinquish_plugin = new \Hoppinger\WordPress\Relinquish\Plugin;
-
-// set properties for the plugin
-$relinquish_plugin->textdomain = 'wp-relinquish';
