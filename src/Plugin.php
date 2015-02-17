@@ -20,6 +20,8 @@ class Plugin {
       'wp_relinquish',
       $this->relinquish_url
     );
+
+    $this->relinquish_url = trailingslashit( $this->relinquish_url );
   }
 
   public function filters() {
