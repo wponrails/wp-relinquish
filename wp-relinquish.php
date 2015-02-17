@@ -10,7 +10,7 @@ Text Domain: wp-relinquish
 Domain Path: /languages
 */
 
-load_textdomain( 'wp-relinquis', __DIR__ . '/languages/' . WPLANG . '.mo' );
+load_textdomain( 'wp-relinquish', __DIR__ . '/languages/' . WPLANG . '.mo' );
 
 // instantiate loader and register namespaces
 $loader = new \Aura\Autoload\Loader;
@@ -21,4 +21,4 @@ $loader->addPrefix( 'Hoppinger\WordPress\Relinquish', __DIR__ . '/src/' );
 $relinquish_plugin = new \Hoppinger\WordPress\Relinquish\Plugin;
 
 // set properties for the plugin
-$relinquish_plugin->textdomain = 'wp-relinquis';
+$relinquish_plugin->textdomain = 'wp-relinquish';
