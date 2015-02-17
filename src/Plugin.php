@@ -23,7 +23,9 @@ class Plugin {
   }
 
   public function filters() {
-    add_filter( 'json_prepare_post', [ $this, 'wp_api_acf_json_prepare_post' ], 10, 3 );
+    add_filter( 'json_prepare_post', [
+      $this, 'wp_api_acf_json_prepare_post'
+    ], 10, 3 );
   }
 
   public function actions() {
