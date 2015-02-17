@@ -6,10 +6,20 @@ use GuzzleHttp\Client;
 
 class Plugin {
   public $synched_types = array();
+  public $relinquish_url = '';
 
   public function __construct() {
     $this->filters();
     $this->actions();
+
+    if ( defined( 'RELINQUISH_URL' ) ) {
+      $this->relinquish_url = RELINQUISH_URL;
+    }
+
+    $this->relinquish_url = apply_filters(
+      'wp_relinquish',
+      $this->relinquish_url
+    );
   }
 
   public function filters() {
@@ -29,13 +39,16 @@ class Plugin {
     add_action( 'trashed_post', array( $this, 'after_trash_post' ) );
     add_action( 'delete_post', array( $this, 'before_delete_post' ) );
 
-    # hook attachments
+    // hook attachments
     add_action( 'edit_attachment', array( $this, 'save_attachment' ) );
     add_action( 'add_attachment', array( $this, 'save_attachment' ) );
   }
 
   public function synch_types() {
-    $this->synched_types = apply_filters( 'rails_connector/synch_type', $this->synched_types );
+    $this->synched_types = apply_filters(
+      'wp_relinquish/synch_type',
+      $this->synched_types
+    );
   }
 
   public function save_post( $post_id, $post, $updated ) {
@@ -58,14 +71,14 @@ class Plugin {
 
     $client = new Client();
 
-    $response = $client->post( RAILS_URL . "/wp-connector/{$post->post_type}/", array(
+    $response = $client->post( RELINQUISH_URL . "/wp-connector/{$post->post_type}/", array(
         'body' => array( 'ID' => $post_id ),
       ) );
 
     return true;
   }
 
-   public function save_attachment( $post_id ) {
+  public function save_attachment( $post_id ) {
     $post = get_post( $post_id );
 
     if ( $post->post_status == 'auto-draft' ) {
@@ -86,7 +99,7 @@ class Plugin {
 
     $client = new Client();
 
-    $url = RAILS_URL . "/wp-connector/{$post->post_type}/";
+    $url = RELINQUISH_URL . "/wp-connector/{$post->post_type}/";
 
     $response = $client->post( $url, array(
         'body' => array( 'ID' => $post_id ),
@@ -108,7 +121,7 @@ class Plugin {
     }
 
     $client  = new Client();
-    $request = $client->createRequest( 'POST', RAILS_URL . "/wp-connector/{$post->post_type}/" );
+    $request = $client->createRequest( 'POST', RELINQUISH_URL . "/wp-connector/{$post->post_type}/" );
     $request->getBody()->setField( 'ID', $post_id );
 
     try {
@@ -134,13 +147,13 @@ class Plugin {
     }
 
     $client = new Client();
-    $response = $client->delete( RAILS_URL . "/wp-connector/{$post->post_type}/{$post_id}" );
+    $response = $client->delete( RELINQUISH_URL . "/wp-connector/{$post->post_type}/{$post_id}" );
 
     return true;
   }
 
   public function send_headers() {
-    header( 'Access-Control-Allow-Origin: ' . RAILS_URL );
+    header( 'Access-Control-Allow-Origin: ' . RELINQUISH_URL );
     header( 'Access-Control-Allow-Credentials: true' );
   }
 
