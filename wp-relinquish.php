@@ -23,7 +23,7 @@ $relinquish_plugin = new \Hoppinger\WordPress\Relinquish\Plugin;
 // [TODO] find a place for this
 function wp_relinquish_json_prepare_post( $_post, $post ) {
   if ( ! defined( 'get_fields ' ) ) {
-    return;
+    return $_post;
   }
 
   $_post['acf_fields'] = [];
