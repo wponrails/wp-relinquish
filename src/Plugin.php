@@ -192,7 +192,7 @@ class Plugin {
     $client = new Client();
 
     // create the request base on the method and endpoint url
-    $request = $client->createRequest( $method, $url );
+    $request = $client->createRequest( $method, $endpoint );
 
     // add body fields if needed
     if ( ! empty( $body ) ) {
