@@ -76,17 +76,9 @@ class Plugin {
       return false;
     }
 
-    $client = new Client();
-    $this->endpoint = $this->relinqish_to . "{$post->post_type}/";
-
-    try {
-      $client->post( $this->endpoint, [
-        'body' => [ 'ID' => $post_id ],
-        ] );
-    } catch ( RequestException $e ) {
-      // add filter to transport this error across the redirect
-      add_filter( 'redirect_post_location', array( $this, 'add_notice_query_var' ) );
-    }
+    $this->fire_webhook( 'POST', $this->relinqish_to . "{$post->post_type}/", [
+      'ID' => $post_id,
+      ] );
 
     return true;
   }
@@ -135,18 +127,9 @@ class Plugin {
       return false;
     }
 
-    $client = new Client();
-
-    $this->endpoint = $this->relinqish_to . "{$post->post_type}/";
-
-    try {
-      $client->post( $url, [
-        'body' => array( 'ID' => $post_id ),
-        ] );
-    } catch ( RequestException $e ) {
-      // add filter to transport this error across the redirect
-      add_filter( 'redirect_post_location', array( $this, 'add_notice_query_var' ) );
-    }
+    $this->fire_webhook( 'POST', $this->relinqish_to . "{$post->post_type}/", [
+      'ID' => $post_id,
+      ] );
 
     return true;
   }
@@ -163,17 +146,9 @@ class Plugin {
       return false;
     }
 
-    $client  = new Client();
-    $this->endpoint = $this->relinqish_to . "{$post->post_type}/";
-    $request = $client->createRequest( 'POST', $this->endpoint );
-    $request->getBody()->setField( 'ID', $post_id );
-
-    try {
-      $client->send( $request );
-    } catch ( RequestException $e ) {
-      // add filter to transport this error across the redirect
-      add_filter( 'redirect_post_location', array( $this, 'add_notice_query_var' ) );
-    }
+    $this->fire_webhook( 'POST', $this->relinqish_to . "{$post->post_type}/", [
+      'ID' => $post_id,
+      ] );
 
     return true;
   }
@@ -201,7 +176,44 @@ class Plugin {
       add_filter( 'redirect_post_location', array( $this, 'add_notice_query_var' ) );
     }
 
+    $this->fire_webhook( 'DELETE', $this->relinqish_to . "{$post->post_type}/", [
+      'ID' => $post_id,
+      ] );
+
+
     return true;
+  }
+
+  private function fire_webhook( $method, $endpoint, $body = null ) {
+    // set this for the query var to keep the endpoint across redirects
+    $this->endpoint = $endpoint;
+
+    // create a guzzle client
+    $client = new Client();
+
+    // create the request base on the method and endpoint url
+    $request = $client->createRequest( $method, $url );
+
+    // add body fields if needed
+    if ( ! empty( $body ) ) {
+      $request_body = $request->getBody();
+      foreach ( $body as $key => $value ) {
+        $request_body->setField( $key, $value );
+      }
+    }
+
+    // add api key to all the requests
+    if ( defined( 'WP_CONNECTOR_API_KEY' ) ) {
+      $request_body->setField( 'api_key', WP_CONNECTOR_API_KEY );
+    }
+
+    // run the request and handle exceptions
+    try {
+      $response = $client->send( $request );
+    } catch ( RequestException $e ) {
+      // add filter to transport this error across the redirect
+      add_filter( 'redirect_post_location', array( $this, 'add_notice_query_var' ) );
+    }
   }
 
   public function send_headers() {
