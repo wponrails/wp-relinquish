@@ -22,7 +22,7 @@ $relinquish_plugin = new \Hoppinger\WordPress\Relinquish\Plugin;
 
 // [TODO] find a place for this
 function wp_relinquish_json_prepare_post( $_post, $post ) {
-  if ( ! defined( 'get_fields ' ) ) {
+  if ( ! function_exists( 'get_fields' ) ) {
     return $_post;
   }
 
