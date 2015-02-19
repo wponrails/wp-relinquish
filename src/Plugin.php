@@ -189,7 +189,8 @@ class Plugin {
   }
 
   public function send_headers() {
-    header( 'Access-Control-Allow-Origin: ' . $this->relinqish_to );
+    $domain = untrailingslashit(RELINQUISH_FRONTEND);
+    header( 'Access-Control-Allow-Origin: ' . $domain );
     header( 'Access-Control-Allow-Credentials: true' );
   }
 
