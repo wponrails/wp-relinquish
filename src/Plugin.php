@@ -42,7 +42,6 @@ class Plugin {
     add_action( 'save_post', [ $this, 'save_post' ], 10, 3 );
 
     add_action( 'trashed_post', [ $this, 'after_trash_post' ] );
-    add_action( 'delete_post', [ $this, 'before_delete_post' ] );
 
     // hook attachments
     add_action( 'edit_attachment', [ $this, 'save_attachment' ] );
@@ -61,6 +60,10 @@ class Plugin {
 
   public function save_post( $post_id, $post, $updated ) {
     if ( $post->post_status == 'auto-draft' ) {
+      return false;
+    }
+
+    if ( $post->post_status == 'trash' ) {
       return false;
     }
 
@@ -146,40 +149,8 @@ class Plugin {
       return false;
     }
 
-    $this->fire_webhook( 'POST', $this->relinqish_to . "{$post->post_type}/", [
-      'ID' => $post_id,
-      ] );
-
-    return true;
-  }
-
-  public function before_delete_post( $post_id ) {
-
-    if ( wp_is_post_revision( $post_id ) ) {
-      return false;
-    }
-
-    $post = get_post( $post_id );
-
-    if ( ! in_array( $post->post_type, $this->synched_types )  ) {
-      return false;
-    }
-
     $client = new Client();
-
-    $this->endpoint = $this->relinqish_to . "/{$post->post_type}/{$post_id}";
-
-    try {
-      $client->delete( $this->endpoint );
-    } catch ( RequestException $e ) {
-      // add filter to transport this error across the redirect
-      add_filter( 'redirect_post_location', array( $this, 'add_notice_query_var' ) );
-    }
-
-    $this->fire_webhook( 'DELETE', $this->relinqish_to . "{$post->post_type}/", [
-      'ID' => $post_id,
-      ] );
-
+    $client->delete( $this->relinqish_to . "{$post->post_type}/" . $post_id . '?api_key=' . WP_CONNECTOR_API_KEY );
 
     return true;
   }
@@ -194,9 +165,10 @@ class Plugin {
     // create the request base on the method and endpoint url
     $request = $client->createRequest( $method, $endpoint );
 
+    $request_body = $request->getBody();
+
     // add body fields if needed
     if ( ! empty( $body ) ) {
-      $request_body = $request->getBody();
       foreach ( $body as $key => $value ) {
         $request_body->setField( $key, $value );
       }
