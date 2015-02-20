@@ -59,6 +59,7 @@ class Plugin {
   }
 
   public function save_post( $post_id, $post, $updated ) {
+
     if ( $post->post_status == 'auto-draft' ) {
       return false;
     }
@@ -75,8 +76,12 @@ class Plugin {
       return false;
     }
 
+    // send drafts also to external app for previews
     if ( $post->post_status == 'draft' ) {
-      return false;
+      $this->fire_webhook( 'POST', $this->relinqish_to . "preview/{$post->post_type}/", [
+        'ID' => $post_id
+      ] );
+      return true;
     }
 
     $this->fire_webhook( 'POST', $this->relinqish_to . "{$post->post_type}/", [
