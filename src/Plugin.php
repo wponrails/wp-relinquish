@@ -210,6 +210,7 @@ class Plugin {
       $slug = $post->post_name;
       if ( empty( $post->post_name ) ) {
         $slug = sanitize_title( $post->post_title );
+        $url = $url . $slug;
       }
 
       $hash = hash( 'sha256', WP_CONNECTOR_SECRET . $slug);
