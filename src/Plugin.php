@@ -206,7 +206,13 @@ class Plugin {
   public function set_post_link( $url, $post ) {
         // handle draft posts preview with token
     if ( in_array( $post->post_status, ['draft', 'pending'] ) ) {
-      $hash = hash( 'sha256', WP_CONNECTOR_SECRET . $post->post_name);
+      // when a post is first saved as a preview the post_name is not set...
+      $slug = $post->post_name;
+      if ( empty( $post->post_name ) ) {
+        $slug = sanitize_title( $post->post_title );
+      }
+
+      $hash = hash( 'sha256', WP_CONNECTOR_SECRET . $slug);
       $url = add_query_arg( 'token', $hash, $url );
     }
 
