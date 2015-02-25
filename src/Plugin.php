@@ -34,6 +34,7 @@ class Plugin {
 
   public function filters() {
     add_filter( 'json_prepare_post', [ $this, 'preview_slugs' ], 10, 2 );
+    add_filter( 'json_prepare_post', [ $this, 'preview_published_at' ], 10, 2 );
   }
 
   public function actions() {
@@ -236,6 +237,16 @@ class Plugin {
     // this fixes this for the API so the external system gets a slug
     if ( empty( $_post['slug'] ) ) {
       $_post['slug'] = sanitize_title( $_post['title'] );
+    }
+
+    return $_post;
+  }
+
+  public function preview_published_at( $_post, $post ) {
+    // when a post is saved as a draft no slug is set
+    // this fixes this for the API so the external system gets a slug
+    if ( empty( $_post['date'] ) ) {
+      $_post['date'] = $_post['modified'];
     }
 
     return $_post;
