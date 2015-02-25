@@ -49,6 +49,11 @@ class Plugin {
 
     // error notices
     add_action( 'admin_notices', [ $this, 'admin_notices' ] );
+
+    // set post links for previews
+    add_filter( 'post_link', array( $this, 'set_post_link' ), 10, 2 );
+    add_filter( 'post_type_link', array( $this, 'set_post_link' ), 10, 2 );
+    add_filter( 'page_link', array( $this, 'set_page_link' ), 10, 2 );
   }
 
   public function synch_post_types() {
@@ -59,6 +64,7 @@ class Plugin {
   }
 
   public function save_post( $post_id, $post, $updated ) {
+
     if ( $post->post_status == 'auto-draft' ) {
       return false;
     }
@@ -75,8 +81,12 @@ class Plugin {
       return false;
     }
 
-    if ( $post->post_status == 'draft' ) {
-      return false;
+    // send drafts also to external app for previews
+    if ( in_array( $post->post_status, ['draft', 'pending'] ) ) {
+      $this->fire_webhook( 'POST', $this->relinqish_to . "preview/{$post->post_type}/", [
+        'ID' => $post_id
+      ] );
+      return true;
     }
 
     $this->fire_webhook( 'POST', $this->relinqish_to . "{$post->post_type}/", [
@@ -186,6 +196,21 @@ class Plugin {
       // add filter to transport this error across the redirect
       add_filter( 'redirect_post_location', array( $this, 'add_notice_query_var' ) );
     }
+  }
+
+  public function set_page_link( $url, $page_id ) {
+    $post = get_post( $page_id );
+    return $this->set_post_link( $url, $post );
+  }
+
+  public function set_post_link( $url, $post ) {
+        // handle draft posts preview with token
+    if ( in_array( $post->post_status, ['draft', 'pending'] ) ) {
+      $hash = hash( 'sha256', WP_CONNECTOR_SECRET . $post->post_name);
+      $url = add_query_arg( 'token', $hash, $url );
+    }
+
+    return $url;
   }
 
   public function send_headers() {
