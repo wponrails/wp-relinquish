@@ -28,7 +28,12 @@ class Plugin {
     // only apply all the hooks if the endpoint url is correctly set
     if ( ! empty( $this->relinqish_to ) ) {
       $this->actions();
+      $this->filters();
     }
+  }
+
+  public function filters() {
+    add_filter( 'json_prepare_post', [ $this, 'preview_slugs' ], 10, 2 );
   }
 
   public function actions() {
@@ -224,6 +229,16 @@ class Plugin {
     $domain = untrailingslashit(RELINQUISH_FRONTEND);
     header( 'Access-Control-Allow-Origin: ' . $domain );
     header( 'Access-Control-Allow-Credentials: true' );
+  }
+
+  public function preview_slugs( $_post, $post ) {
+    // when a post is saved as a draft no slug is set
+    // this fixes this for the API so the external system gets a slug
+    if ( empty( $_post['slug'] ) ) {
+      $_post['slug'] = sanitize_title( $_post['title'] );
+    }
+
+    return $_post;
   }
 
 }
