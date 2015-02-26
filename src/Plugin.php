@@ -176,10 +176,7 @@ class Plugin {
   }
 
   public function save_term( $term_id, $tt_id, $taxonomy ) {
-    // make post_tag consistent with other taxonomies
-    if ( $taxonomy == 'post_tag' ) {
-      $taxonomy = 'tag';
-    }
+    $taxonomy = $this->standardize_taxonomy_name( $taxonomy );
 
     $this->fire_webhook( 'POST', $this->relinqish_to . "{$taxonomy}/", [
       'ID' => $term_id,
@@ -267,6 +264,15 @@ class Plugin {
     }
 
     return $_post;
+  }
+
+  private function standardize_taxonomy_name( $taxonomy ) {
+    // make post_tag consistent with other taxonomies
+    if ( $taxonomy == 'post_tag' ) {
+      $taxonomy = 'tag';
+    }
+
+    return $taxonomy;
   }
 
 }
