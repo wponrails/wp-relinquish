@@ -7,12 +7,12 @@ use WP_JSON_Server;
 
 trait Relinquishable {
 
-  public function register_routes( $routes ) {
-    $routes = parent::register_routes( $routes );
+  public function register_routes($routes) {
+    $routes = parent::register_routes($routes);
 
-    $route = $this->base . '/preview/(?P<id>\d+)';
-    $routes[ $route ] = array(
-      array( array( $this, 'get_preview' ), WP_JSON_Server::READABLE ),
+    $route = $this->base.'/preview/(?P<id>\d+)';
+    $routes[$route] = array(
+      array(array($this, 'get_preview'), WP_JSON_Server::READABLE),
     );
 
     return $routes;
@@ -25,17 +25,17 @@ trait Relinquishable {
    * @param int $id Post ID
    * @return array Post entity
    */
-  public function get_preview( $id, $context = 'view' ) {
+  public function get_preview($id, $context = 'view') {
     $id = (int) $id;
 
-    if ( empty( $id ) ) {
-      return new WP_Error( 'json_post_invalid_id', __( 'Invalid post ID.' ), array( 'status' => 404 ) );
+    if (empty($id)) {
+      return new WP_Error('json_post_invalid_id', __('Invalid post ID.'), array('status' => 404));
     }
 
-    $post = get_post( $id, ARRAY_A );
+    $post = get_post($id, ARRAY_A);
 
-    if ( empty( $post['ID'] ) ) {
-      return new WP_Error( 'json_post_invalid_id', __( 'Invalid post ID.' ), array( 'status' => 404 ) );
+    if (empty($post['ID'])) {
+      return new WP_Error('json_post_invalid_id', __('Invalid post ID.'), array('status' => 404));
     }
 
     // [TODO] turn of permisions for now... auth later in a different way?
@@ -44,28 +44,28 @@ trait Relinquishable {
     // }
 
     $response = new WP_JSON_Response();
-    $response->header( 'Last-Modified', mysql2date( 'D, d M Y H:i:s', $post['post_modified_gmt'] ) . 'GMT' );
+    $response->header('Last-Modified', mysql2date('D, d M Y H:i:s', $post['post_modified_gmt']).'GMT');
 
     // down the line of classes more checks are done if the post it accesible or not
     // by setting the status to publish one of these checks return true and the post will be rendered
     $real_status         = $post['post_status'];
     $post['post_status'] = 'publish';
 
-    $post = $this->prepare_post( $post, $context );
+    $post = $this->prepare_post($post, $context);
 
     // set the status back to the real status
     $post['status'] = $real_status;
 
-    if ( is_wp_error( $post ) ) {
+    if (is_wp_error($post)) {
       return $post;
     }
 
-    foreach ( $post['meta']['links'] as $rel => $url ) {
-      $response->link_header( $rel, $url );
+    foreach ($post['meta']['links'] as $rel => $url) {
+      $response->link_header($rel, $url);
     }
 
-    $response->link_header( 'alternate',  get_permalink( $id ), array( 'type' => 'text/html' ) );
-    $response->set_data( $post );
+    $response->link_header('alternate', get_permalink($id), array('type' => 'text/html'));
+    $response->set_data($post);
 
     return $response;
   }
