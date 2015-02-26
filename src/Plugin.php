@@ -90,16 +90,9 @@ class Plugin {
       return false;
     }
 
-    // send drafts also to external app for previews
-    if (in_array($post->post_status, ['draft', 'pending'])) {
-      $this->fire_webhook('POST', $this->relinqish_to."preview/{$post->post_type}/", [
-        'ID' => $post_id
-      ]);
-      return true;
-    }
-
     $this->fire_webhook('POST', $this->relinqish_to."{$post->post_type}/", [
       'ID' => $post_id,
+      'preview' => in_array($post->post_status, ['draft', 'pending']),
       ]);
 
     return true;
@@ -264,7 +257,6 @@ class Plugin {
     if (empty($_post['slug'])) {
       $_post['slug'] = sanitize_title($_post['title']);
     }
-
     return $_post;
   }
 
@@ -283,7 +275,6 @@ class Plugin {
     if ($taxonomy == 'post_tag') {
       $taxonomy = 'tag';
     }
-
     return $taxonomy;
   }
 }
