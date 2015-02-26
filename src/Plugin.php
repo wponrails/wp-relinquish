@@ -10,7 +10,6 @@ class Plugin {
   public $relinqish_to  = null;
   public $textdomain    = 'wp-relinquish';
 
-  private $error        = null;
   private $endpoint     = null;
 
   public function __construct() {
@@ -69,8 +68,7 @@ class Plugin {
     );
   }
 
-  public function save_post($post_id, $post, $updated) {
-
+  public function save_post($post_id, $post) {
     if ($post->post_status == 'auto-draft') {
       return false;
     }
@@ -122,7 +120,7 @@ class Plugin {
     // [TODO] refactor so no html is inside this class
 ?>
    <div class="error">
-      <p><?php print $notice ?></p>
+      <p><?php echo $notice ?></p>
    </div>
 <?php
   }
@@ -201,7 +199,7 @@ class Plugin {
 
     // run the request and handle exceptions
     try {
-      $response = $client->send($request);
+      $client->send($request);
     } catch (RequestException $e) {
       // add filter to transport this error across the redirect
       add_filter('redirect_post_location', array($this, 'add_notice_query_var'));
@@ -246,7 +244,7 @@ class Plugin {
     return $_post;
   }
 
-  public function preview_published_at($_post, $post) {
+  public function preview_published_at($_post) {
     // when a post is saved as a draft no slug is set
     // this fixes this for the API so the external system gets a slug
     if (empty($_post['date'])) {
@@ -255,5 +253,4 @@ class Plugin {
 
     return $_post;
   }
-
 }

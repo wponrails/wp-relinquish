@@ -2,8 +2,8 @@
 
 namespace Hoppinger\WordPress\Relinquish\Traits;
 
-use WP_JSON_Response,
-    WP_JSON_Server;
+use WP_JSON_Response;
+use WP_JSON_Server;
 
 trait Relinquishable {
 
@@ -23,7 +23,6 @@ trait Relinquishable {
    *
    * @uses get_preview()
    * @param int $id Post ID
-   * @param array $fields Post fields to return (optional)
    * @return array Post entity
    */
   public function get_preview( $id, $context = 'view' ) {
@@ -70,5 +69,4 @@ trait Relinquishable {
 
     return $response;
   }
-
 }
