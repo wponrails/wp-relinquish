@@ -60,6 +60,10 @@ class Plugin {
     add_filter( 'post_link', array( $this, 'set_post_link' ), 10, 2 );
     add_filter( 'post_type_link', array( $this, 'set_post_link' ), 10, 2 );
     add_filter( 'page_link', array( $this, 'set_page_link' ), 10, 2 );
+
+    // hook categories & tags
+    add_action( 'edit_term', [ $this, 'save_term' ], 10, 3 );
+    add_action( 'create_term', [ $this, 'save_term' ], 10, 3 );
   }
 
   public function synch_post_types() {
@@ -167,6 +171,19 @@ class Plugin {
 
     $client = new Client();
     $client->delete( $this->relinqish_to . "{$post->post_type}/" . $post_id . '?api_key=' . WP_CONNECTOR_API_KEY );
+
+    return true;
+  }
+
+  public function save_term( $term_id, $tt_id, $taxonomy ) {
+    // make post_tag consistent with other taxonomies
+    if ( $taxonomy == 'post_tag' ) {
+      $taxonomy = 'tag';
+    }
+
+    $this->fire_webhook( 'POST', $this->relinqish_to . "{$taxonomy}/", [
+      'ID' => $term_id,
+      ] );
 
     return true;
   }
