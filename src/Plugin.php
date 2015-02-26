@@ -63,7 +63,7 @@ class Plugin {
     // hook categories & tags
     add_action( 'edit_term', [ $this, 'save_term' ], 10, 3 );
     add_action( 'create_term', [ $this, 'save_term' ], 10, 3 );
-    add_action( 'delete_term', [ $this, 'delete_term' ], 10, 4 );
+    add_action( 'delete_term', [ $this, 'delete_term' ], 10, 3 );
   }
 
   public function synch_post_types() {
@@ -184,7 +184,7 @@ class Plugin {
     return true;
   }
 
-  public function delete_term( $term_id, $tt_id, $taxonomy, $deleted_term ) {
+  public function delete_term( $term_id, $tt_id, $taxonomy ) {
     $taxonomy = $this->standardize_taxonomy_name( $taxonomy );
 
     $client = new Client();
