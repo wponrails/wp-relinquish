@@ -1,8 +1,8 @@
 wp-relinquish
 =============
 
-https://scrutinizer-ci.com/g/hoppinger/wp-relinquish/badges/quality-score.png?b=master
-https://scrutinizer-ci.com/g/hoppinger/wp-relinquish/badges/build.png?b=master
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/hoppinger/wp-relinquish/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/hoppinger/wp-relinquish/?branch=master)
+[![Build Status](https://scrutinizer-ci.com/g/hoppinger/wp-relinquish/badges/build.png?b=master)](https://scrutinizer-ci.com/g/hoppinger/wp-relinquish/build-status/master)
 
 With this plugin [WordPress](http://wordpress.org) can *relinquish* content serving to an external system, for instance a Rails application with the [wp-connector](https://github.com/hoppinger/wp-connector) gem.
 
