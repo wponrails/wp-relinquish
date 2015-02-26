@@ -64,6 +64,7 @@ class Plugin {
     // hook categories & tags
     add_action( 'edit_term', [ $this, 'save_term' ], 10, 3 );
     add_action( 'create_term', [ $this, 'save_term' ], 10, 3 );
+    add_action( 'delete_term', [ $this, 'delete_term' ], 10, 4 );
   }
 
   public function synch_post_types() {
@@ -181,6 +182,15 @@ class Plugin {
     $this->fire_webhook( 'POST', $this->relinqish_to . "{$taxonomy}/", [
       'ID' => $term_id,
       ] );
+
+    return true;
+  }
+
+  public function delete_term( $term_id, $tt_id, $taxonomy, $deleted_term ) {
+    $taxonomy = $this->standardize_taxonomy_name( $taxonomy );
+
+    $client = new Client();
+    $client->delete( $this->relinqish_to . "{$taxonomy}/" . $term_id . '?api_key=' . WP_CONNECTOR_API_KEY );
 
     return true;
   }
