@@ -2,8 +2,8 @@
 
 namespace Hoppinger\WordPress\Relinquish\Traits;
 
-use WP_JSON_Response,
-    WP_JSON_Server;
+use WP_JSON_Response;
+use WP_JSON_Server;
 
 trait Relinquishable {
 
