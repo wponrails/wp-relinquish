@@ -125,46 +125,46 @@ class Plugin {
 <?php
   }
 
-  public function save_attachment( $post_id ) {
-    $post = get_post( $post_id );
+  public function save_attachment($post_id) {
+    $post = get_post($post_id);
 
-    if ( $post->post_status == 'auto-draft' ) {
+    if ($post->post_status == 'auto-draft') {
       return false;
     }
 
-    if ( wp_is_post_revision( $post_id ) ) {
+    if (wp_is_post_revision($post_id)) {
       return false;
     }
 
-    if ( ! in_array( $post->post_type, $this->synched_types )  ) {
+    if ( ! in_array($post->post_type, $this->synched_types)) {
       return false;
     }
 
-    if ( $post->post_status == 'draft' ) {
+    if ($post->post_status == 'draft') {
       return false;
     }
 
-    $this->fire_webhook( 'POST', $this->relinqish_to . "{$post->post_type}/", [
+    $this->fire_webhook('POST', $this->relinqish_to."{$post->post_type}/", [
       'ID' => $post_id,
-      ] );
+      ]);
 
     return true;
   }
 
-  public function after_trash_post( $post_id ) {
+  public function after_trash_post($post_id) {
 
-    if ( wp_is_post_revision( $post_id ) ) {
+    if (wp_is_post_revision($post_id)) {
       return false;
     }
 
-    $post = get_post( $post_id );
+    $post = get_post($post_id);
 
-    if ( ! in_array( $post->post_type, $this->synched_types )  ) {
+    if ( ! in_array($post->post_type, $this->synched_types)) {
       return false;
     }
 
     $client = new Client();
-    $client->delete( $this->relinqish_to . "{$post->post_type}/" . $post_id . '?api_key=' . WP_CONNECTOR_API_KEY );
+    $client->delete($this->relinqish_to."{$post->post_type}/".$post_id.'?api_key='.WP_CONNECTOR_API_KEY);
 
     return true;
   }
@@ -173,7 +173,7 @@ class Plugin {
    * @param string $method
    * @param string $endpoint
    */
-  private function fire_webhook( $method, $endpoint, $body = null ) {
+  private function fire_webhook($method, $endpoint, $body = null) {
     // set this for the query var to keep the endpoint across redirects
     $this->endpoint = $endpoint;
 
