@@ -171,6 +171,10 @@ class Plugin {
     return true;
   }
 
+  /**
+   * @param string $method
+   * @param string $endpoint
+   */
   private function fire_webhook( $method, $endpoint, $body = null ) {
     // set this for the query var to keep the endpoint across redirects
     $this->endpoint = $endpoint;
