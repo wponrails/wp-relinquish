@@ -34,6 +34,11 @@ class Plugin {
   public function filters() {
     add_filter('json_prepare_post', [$this, 'preview_slugs'], 10, 2);
     add_filter('json_prepare_post', [$this, 'preview_published_at'], 10, 2);
+
+    // set post links for previews
+    add_filter('post_link', array($this, 'set_post_link'), 10, 2);
+    add_filter('post_type_link', array($this, 'set_post_link'), 10, 2);
+    add_filter('page_link', array($this, 'set_page_link'), 10, 2);
   }
 
   public function actions() {
@@ -55,10 +60,10 @@ class Plugin {
     // error notices
     add_action('admin_notices', [$this, 'admin_notices']);
 
-    // set post links for previews
-    add_filter('post_link', array($this, 'set_post_link'), 10, 2);
-    add_filter('post_type_link', array($this, 'set_post_link'), 10, 2);
-    add_filter('page_link', array($this, 'set_page_link'), 10, 2);
+    // hook categories & tags
+    add_action( 'edit_term', [ $this, 'save_term' ], 10, 3 );
+    add_action( 'create_term', [ $this, 'save_term' ], 10, 3 );
+    add_action( 'delete_term', [ $this, 'delete_term' ], 10, 4 );
   }
 
   public function synch_post_types() {
@@ -169,6 +174,25 @@ class Plugin {
     return true;
   }
 
+  public function save_term( $term_id, $tt_id, $taxonomy ) {
+    $taxonomy = $this->standardize_taxonomy_name( $taxonomy );
+
+    $this->fire_webhook( 'POST', $this->relinqish_to . "{$taxonomy}/", [
+      'ID' => $term_id,
+      ] );
+
+    return true;
+  }
+
+  public function delete_term( $term_id, $tt_id, $taxonomy, $deleted_term ) {
+    $taxonomy = $this->standardize_taxonomy_name( $taxonomy );
+
+    $client = new Client();
+    $client->delete( $this->relinqish_to . "{$taxonomy}/" . $term_id . '?api_key=' . WP_CONNECTOR_API_KEY );
+
+    return true;
+  }
+
   /**
    * @param string $method
    * @param string $endpoint
@@ -252,5 +276,14 @@ class Plugin {
     }
 
     return $_post;
+  }
+
+  private function standardize_taxonomy_name( $taxonomy ) {
+    // make post_tag consistent with other taxonomies
+    if ( $taxonomy == 'post_tag' ) {
+      $taxonomy = 'tag';
+    }
+
+    return $taxonomy;
   }
 }
