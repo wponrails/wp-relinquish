@@ -61,9 +61,9 @@ class Plugin {
     add_action('admin_notices', [$this, 'admin_notices']);
 
     // hook categories & tags
-    add_action( 'edit_term', [ $this, 'save_term' ], 10, 3 );
-    add_action( 'create_term', [ $this, 'save_term' ], 10, 3 );
-    add_action( 'delete_term', [ $this, 'delete_term' ], 10, 3 );
+    add_action('edit_term', [$this, 'save_term'], 10, 3);
+    add_action('create_term', [$this, 'save_term'], 10, 3);
+    add_action('delete_term', [$this, 'delete_term'], 10, 3);
   }
 
   public function synch_post_types() {
@@ -174,21 +174,21 @@ class Plugin {
     return true;
   }
 
-  public function save_term( $term_id, $tt_id, $taxonomy ) {
-    $taxonomy = $this->standardize_taxonomy_name( $taxonomy );
+  public function save_term($term_id, $tt_id, $taxonomy) {
+    $taxonomy = $this->standardize_taxonomy_name($taxonomy);
 
-    $this->fire_webhook( 'POST', $this->relinqish_to . "{$taxonomy}/", [
+    $this->fire_webhook('POST', $this->relinqish_to."{$taxonomy}/", [
       'ID' => $term_id,
-      ] );
+      ]);
 
     return true;
   }
 
-  public function delete_term( $term_id, $tt_id, $taxonomy ) {
-    $taxonomy = $this->standardize_taxonomy_name( $taxonomy );
+  public function delete_term($term_id, $tt_id, $taxonomy) {
+    $taxonomy = $this->standardize_taxonomy_name($taxonomy);
 
     $client = new Client();
-    $client->delete( $this->relinqish_to . "{$taxonomy}/" . $term_id . '?api_key=' . WP_CONNECTOR_API_KEY );
+    $client->delete($this->relinqish_to."{$taxonomy}/".$term_id.'?api_key='.WP_CONNECTOR_API_KEY);
 
     return true;
   }
@@ -278,9 +278,9 @@ class Plugin {
     return $_post;
   }
 
-  private function standardize_taxonomy_name( $taxonomy ) {
+  private function standardize_taxonomy_name($taxonomy) {
     // make post_tag consistent with other taxonomies
-    if ( $taxonomy == 'post_tag' ) {
+    if ($taxonomy == 'post_tag') {
       $taxonomy = 'tag';
     }
 
