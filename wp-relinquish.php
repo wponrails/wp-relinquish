@@ -10,28 +10,28 @@ Text Domain: wp-relinquish
 Domain Path: /languages
 */
 
-load_textdomain( 'wp-relinquish', __DIR__ . '/languages/' . WPLANG . '.mo' );
+load_textdomain('wp-relinquish', __DIR__.'/languages/'.WPLANG.'.mo');
 
 // instantiate loader and register namespaces
 $loader = new \Aura\Autoload\Loader;
 $loader->register();
-$loader->addPrefix( 'Hoppinger\WordPress\Relinquish', __DIR__ . '/src/' );
+$loader->addPrefix('Hoppinger\WordPress\Relinquish', __DIR__.'/src/');
 
 // instantiate this plugin
 $relinquish_plugin = new \Hoppinger\WordPress\Relinquish\Plugin;
 
 // [TODO] find a place for this
-function wp_relinquish_json_prepare_post( $_post, $post ) {
-  if ( ! function_exists( 'get_fields' ) ) {
+function wp_relinquish_json_prepare_post($_post, $post) {
+  if ( ! function_exists('get_fields')) {
     return $_post;
   }
 
   $_post['acf_fields'] = [];
 
-  if ( $fields = get_fields( $post['ID'] ) ) {
+  if ($fields = get_fields($post['ID'])) {
     $_post['acf_fields'] = $fields;
   }
 
   return $_post;
 }
-add_filter( 'json_prepare_post', 'wp_relinquish_json_prepare_post', 10, 2 );
+add_filter('json_prepare_post', 'wp_relinquish_json_prepare_post', 10, 2);
