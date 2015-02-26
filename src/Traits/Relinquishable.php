@@ -23,7 +23,6 @@ trait Relinquishable {
    *
    * @uses get_preview()
    * @param int $id Post ID
-   * @param array $fields Post fields to return (optional)
    * @return array Post entity
    */
   public function get_preview( $id, $context = 'view' ) {
