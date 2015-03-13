@@ -39,6 +39,9 @@ class Plugin {
     add_filter('post_link', array($this, 'set_post_link'), 10, 2);
     add_filter('post_type_link', array($this, 'set_post_link'), 10, 2);
     add_filter('page_link', array($this, 'set_page_link'), 10, 2);
+
+    // delay preview so the other app has time to process
+    add_filter('wp_redirect', [$this,'delay_preview'], 10, 2);
   }
 
   public function actions() {
@@ -268,6 +271,22 @@ class Plugin {
     }
 
     return $_post;
+  }
+
+  /**
+   * Delay preview redirects to give external app time to process
+   */
+  public function delay_preview($location, $status) {
+    if ( ! defined('RELINQUISH_PREVIEW_DELAY') ) {
+      return $location;
+    }
+
+    if (strpos('preview=true', $location) !== 0) {
+      // sleeptime in seconds
+      sleep(RELINQUISH_PREVIEW_DELAY);
+    }
+
+    return $location;
   }
 
   private function standardize_taxonomy_name($taxonomy) {
