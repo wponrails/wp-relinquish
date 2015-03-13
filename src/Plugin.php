@@ -41,7 +41,7 @@ class Plugin {
     add_filter('page_link', array($this, 'set_page_link'), 10, 2);
 
     // delay preview so the other app has time to process
-    add_filter('wp_redirect', [$this,'delay_preview'], 10, 2);
+    add_filter('wp_redirect', [$this,'delay_preview']);
   }
 
   public function actions() {
@@ -276,7 +276,7 @@ class Plugin {
   /**
    * Delay preview redirects to give external app time to process
    */
-  public function delay_preview($location, $status) {
+  public function delay_preview($location) {
     if ( ! defined('RELINQUISH_PREVIEW_DELAY') ) {
       return $location;
     }
