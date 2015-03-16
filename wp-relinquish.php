@@ -55,3 +55,21 @@ function wp_relinquish_json_prepare_post($_post, $post) {
 }
 
 add_filter('json_prepare_post', 'wp_relinquish_json_prepare_post', 10, 2);
+
+
+// [TODO] find a place for this
+// this is a function to add WP SEO stuff of category in the JSON
+function wp_relinquish_json_prepare_term($_post, $post) {
+  $options = get_option('wpseo_taxonomy_meta', '');
+
+  $seoMeta = array(
+    'title'               => $options['category'][$post->term_id]['wpseo_title'], // wpseo_title
+    'metadesc'            => $options['category'][$post->term_id]['wpseo_desc'], // wpseo_desc
+  );
+
+  $_post['seo_fields'] = $seoMeta;
+
+  return $_post;
+
+}
+add_filter('json_prepare_term', 'wp_relinquish_json_prepare_term', 10, 2);
