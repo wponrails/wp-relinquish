@@ -65,6 +65,9 @@ function wp_relinquish_json_prepare_term($_term, $term) {
   $seoMeta = array(
     'title'               => $options['category'][$term->term_id]['wpseo_title'], // wpseo_title
     'metadesc'            => $options['category'][$term->term_id]['wpseo_desc'], // wpseo_desc
+    'canonical'           => $options['category'][$term->term_id]['wpseo_canonical'],
+    'meta-robots-noindex' => $options['category'][$term->term_id]['wpseo_meta-robots-noindex'] == '1',
+    'sitemap-include'     => $options['category'][$term->term_id]['wpseo_sitemap-include'] == 'always',
   );
 
   $_term['seo_fields'] = $seoMeta;
