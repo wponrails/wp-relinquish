@@ -32,6 +32,10 @@ function wp_relinquish_json_prepare_post($_post, $post) {
     $_post['acf_fields'] = $fields;
   }
 
+  if ('page' == $post['post_type']) {
+	$_post['template'] = str_replace( '.php', '', $post['page_template'] );
+  }
+
   $seoMeta = array(
     'focuskw'              => get_post_meta($post['ID'], '_yoast_wpseo_focuskw', true),
     'title'                => get_post_meta($post['ID'], '_yoast_wpseo_title', true),
