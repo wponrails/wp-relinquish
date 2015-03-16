@@ -33,7 +33,7 @@ function wp_relinquish_json_prepare_post($_post, $post) {
   }
 
   if ('page' == $post['post_type']) {
-	$_post['template'] = str_replace( '.php', '', $post['page_template'] );
+    $_post['template'] = str_replace( '.php', '', $post['page_template'] );
   }
 
   $seoMeta = array(
@@ -67,15 +67,15 @@ function wp_relinquish_json_prepare_term($_term, $term) {
   $options = get_option('wpseo_taxonomy_meta', '');
 
   if ( isset( $options['category'] ) ) {
-	$seoMeta = array(
-	  'title'               => $options['category'][$term->term_id]['wpseo_title'], // wpseo_title
-	  'metadesc'            => $options['category'][$term->term_id]['wpseo_desc'], // wpseo_desc
-	  'canonical'           => $options['category'][$term->term_id]['wpseo_canonical'],
-	  'meta-robots-noindex' => $options['category'][$term->term_id]['wpseo_noindex'] == '1',
-	  'sitemap-include'     => $options['category'][$term->term_id]['wpseo_sitemap_include'] == 'always',
-	);
+    $seoMeta = array(
+      'title'               => $options['category'][$term->term_id]['wpseo_title'], // wpseo_title
+      'metadesc'            => $options['category'][$term->term_id]['wpseo_desc'], // wpseo_desc
+      'canonical'           => $options['category'][$term->term_id]['wpseo_canonical'],
+      'meta-robots-noindex' => $options['category'][$term->term_id]['wpseo_noindex'] == '1',
+      'sitemap-include'     => $options['category'][$term->term_id]['wpseo_sitemap_include'] == 'always',
+    );
 
-	$_term['seo_fields'] = $seoMeta;
+    $_term['seo_fields'] = $seoMeta;
   }
 
   return $_term;
