@@ -32,7 +32,7 @@ function wp_relinquish_json_prepare_post($_post, $post) {
     $_post['acf_fields'] = $fields;
   }
 
-  if ('page' == $post['post_type']) {
+  if ('page' == $post['post_type'] && isset($post['page_template'])) {
     $_post['template'] = str_replace( '.php', '', $post['page_template'] );
   }
 
