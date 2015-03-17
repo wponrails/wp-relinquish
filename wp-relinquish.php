@@ -66,7 +66,7 @@ add_filter('json_prepare_post', 'wp_relinquish_json_prepare_post', 10, 2);
 function wp_relinquish_json_prepare_term($_term, $term) {
   $options = get_option('wpseo_taxonomy_meta', '');
 
-  if ( isset( $options['category'] ) ) {
+  if ( isset( $options['category'] && isset( $options['category'][$term->term_id] ) ) {
     $seoMeta = array(
       'title'               => $options['category'][$term->term_id]['wpseo_title'], // wpseo_title
       'metadesc'            => $options['category'][$term->term_id]['wpseo_desc'], // wpseo_desc
