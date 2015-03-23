@@ -55,6 +55,9 @@ class Plugin {
     add_action('save_post', [$this, 'save_post'], 10, 3);
     add_action('edit_attachment', [$this, 'save_media']);
 
+    // hook to save media
+    add_action('added_post_meta', [$this, 'save_post_meta'], 10, 2);
+
     add_action('trashed_post', [$this, 'after_trash_post']);
 
     // hook attachments
@@ -78,6 +81,11 @@ class Plugin {
   }
 
   public function save_media($post_id) {
+    $post = get_post($post_id);
+    return $this->save_post($post_id, $post);
+  }
+
+  public function save_post_meta($mid, $post_id) {
     $post = get_post($post_id);
     return $this->save_post($post_id, $post);
   }
