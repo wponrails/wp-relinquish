@@ -32,15 +32,19 @@ function wp_relinquish_json_prepare_post($_post, $post) {
     $_post['acf_fields'] = $fields;
   }
 
+  if ($_post['type'] == 'attachment') {
+    $_post['alt'] = get_post_meta($post['ID'], '_wp_attachment_image_alt', true);
+  }
+
   $seoMeta = array(
     'focuskw'              => get_post_meta($post['ID'], '_yoast_wpseo_focuskw', true),
     'title'                => get_post_meta($post['ID'], '_yoast_wpseo_title', true),
     'metadesc'             => get_post_meta($post['ID'], '_yoast_wpseo_metadesc', true),
     'linkdex'              => get_post_meta($post['ID'], '_yoast_wpseo_linkdex', true),
     'meta-robots-noindex'  => (get_post_meta($post['ID'], '_yoast_wpseo_meta-robots-noindex', true) == '1'),
-    'meta-robots-nofollow' => (get_post_meta($post['ID'], '_yoast_wpseo_meta-robots-nofollow', true) == '1'),
+    'meta-robots-nofollow' => (get_post_meta($post['ID'], '_yoast_wpseo_meta-robots-nofollow', true) == '2'),
     'meta-robots-adv'      => get_post_meta($post['ID'], '_yoast_wpseo_meta-robots-adv', true),
-    'sitemap-include'      => (get_post_meta($post['ID'], '_yoast_wpseo_sitemap-include', true) == 'always'),
+    'sitemap-include'      => (get_post_meta($post['ID'], '_yoast_wpseo_sitemap-include', true) != 'never'),
     'sitemap-prio'         => get_post_meta($post['ID'], '_yoast_wpseo_sitemap-prio', true),
     'canonical'            => get_post_meta($post['ID'], '_yoast_wpseo_canonical', true),
     'redirect'             => get_post_meta($post['ID'], '_yoast_wpseo_redirect', true),
