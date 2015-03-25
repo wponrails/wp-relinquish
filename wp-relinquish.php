@@ -34,6 +34,7 @@ function wp_relinquish_json_prepare_post($_post, $post) {
 
   if ('page' == $post['post_type'] && isset($post['page_template'])) {
     $_post['template'] = str_replace( '.php', '', $post['page_template'] );
+  }
 
   if ($_post['type'] == 'attachment') {
     $_post['alt'] = get_post_meta($post['ID'], '_wp_attachment_image_alt', true);
