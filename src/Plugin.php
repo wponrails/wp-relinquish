@@ -190,7 +190,7 @@ class Plugin {
     $taxonomy = $this->standardize_taxonomy_name($taxonomy);
 
     $client = new Client();
-    $client->delete($this->relinqish_to."{$taxonomy}/".$term_id.'?api_key='.WP_CONNECTOR_API_KEY);
+    $client->delete($this->relinqish_to."{$taxonomy}/".$tt_id.'?api_key='.WP_CONNECTOR_API_KEY);
 
     return true;
   }
