@@ -180,7 +180,7 @@ class Plugin {
     $taxonomy = $this->standardize_taxonomy_name($taxonomy);
 
     $this->fire_webhook('POST', $this->relinqish_to."{$taxonomy}/", [
-      'ID' => $term_id,
+      'ID' => $tt_id,
       ]);
 
     return true;
