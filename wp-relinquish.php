@@ -40,9 +40,16 @@ function wp_relinquish_json_prepare_post($_post, $post) {
     $_post['alt'] = get_post_meta($post['ID'], '_wp_attachment_image_alt', true);
   }
 
+  $seo_title = get_post_meta($post['ID'], '_yoast_wpseo_title', true);
+  # TODO; (Mats Rietdijk) use the Yoast SEO title format to set the default
+  # default the SEO title to the post title
+  if ( empty( $seo_title ) ) {
+    $seo_title = $post['post_title'];
+  }
+
   $seoMeta = array(
     'focuskw'              => get_post_meta($post['ID'], '_yoast_wpseo_focuskw', true),
-    'title'                => get_post_meta($post['ID'], '_yoast_wpseo_title', true),
+    'title'                => $seo_title,
     'metadesc'             => get_post_meta($post['ID'], '_yoast_wpseo_metadesc', true),
     'linkdex'              => get_post_meta($post['ID'], '_yoast_wpseo_linkdex', true),
     'meta-robots-noindex'  => (get_post_meta($post['ID'], '_yoast_wpseo_meta-robots-noindex', true) == '1'),
