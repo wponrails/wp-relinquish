@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: WP Relinquish
-Version: 0.0.1-alpha
-Description: With this plugin WordPress can <em>relinquish</em> content serving to an external system, for instance a Rails application with the <a href="https://github.com/hoppinger/wp-connector">wp-connector gem</a>.
+Version: 0.0.2-alpha
+Description: With this plugin WordPress can <em>relinquish</em> content serving to an external system, for instance a Rails application with the <a href="https://github.com/wponrails/wp-connector">wp-connector gem</a>.
 Author: Hoppinger
 Author URI: http://www.hoppinger.com
-Plugin URI: https://github.com/hoppinger/wp-relinquish
+Plugin URI: https://github.com/wponrails/wp-relinquish
 Text Domain: wp-relinquish
 Domain Path: /languages
 */
