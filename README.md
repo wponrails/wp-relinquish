@@ -10,7 +10,7 @@ The `wp-relinquish` plugin, as the name implies, allows [WordPress](http://wordp
 
 The following plugins are needed or recommended when using `wp-relinquish` to set up a **WP on Rails** architecture:
 
-* **json-rest-api** ([site](http://wp-api.org), [plugin page](https://wordpress.org/plugins/json-rest-api) [repo](https://github.com/WP-API/WP-API)) [mandatory] — WP plugin that adds a modern RESTful web-API to a WordPress site. This module will be shipped as part of WordPress Core in the future.
+* **json-rest-api** ([site](http://wp-api.org), [plugin page](https://wordpress.org/plugins/json-rest-api), [repo](https://github.com/WP-API/WP-API)) [mandatory] — WP plugin that adds a modern RESTful web-API to a WordPress site. This module will be shipped as part of WordPress Core in the future.
 * **json-rest-api-menu-routes** ([plugin page](https://wordpress.org/plugins/wp-api-menus), [repo](https://github.com/nekojira/wp-api-menus)) [optional] — WordPress plugin that extends the WP API with functionality regard WP's menus. This is only needed if you want to manage menus from WP and display them from Rails.
 * **wp-relinquish-theme** ([repo](https://github.com/wponrails/wp-relinquish-theme)) [optional] — This WP theme is to be used together with the `wp-relinquish` plugin, it displays only the admin bar which (which can then be picked up when previewing content that is to be served from Rails).
 
