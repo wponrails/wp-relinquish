@@ -6,9 +6,9 @@ wp-relinquish
 
 This [WordPress](http://wordpress.org) plugin is part of the [**WP on Rails**](https://github.com/wponrails) project, which limits a WP's responsibilities to managing content while entrusting a Rails application with serving public request and providing a basis for customizations.
 
-The `wp-relinquish` plugin, as the name implies, allows [WordPress](http://wordpress.org) to *relinquish* content serving to an external system, in case of the **WP on Rails** architecture that is a Rails application with [wp-connector](https://github.com/wponrails/wp-connector) installed.
+The `wp-relinquish` plugin —as the name implies— helps [WordPress](http://wordpress.org) to "relinquish" content serving to an external system. In case of the **WP on Rails** architecture that is a Rails application with [wp-connector](https://github.com/wponrails/wp-connector) installed.
 
-The following plugins are needed or recommended when using `wp-relinquish` to set up a **WP on Rails** architecture:
+The following plugins are needed or recommended when using `wp-relinquish` to setup a **WP on Rails** architecture:
 
 * **json-rest-api** ([site](http://wp-api.org), [plugin page](https://wordpress.org/plugins/json-rest-api), [repo](https://github.com/WP-API/WP-API)) [mandatory] — WP plugin that adds a modern RESTful web-API to a WordPress site. This module will be shipped as part of WordPress Core in the future.
 * **json-rest-api-menu-routes** ([plugin page](https://wordpress.org/plugins/wp-api-menus), [repo](https://github.com/nekojira/wp-api-menus)) [optional] — WordPress plugin that extends the WP API with functionality regard WP's menus. This is only needed if you want to manage menus from WP and display them from Rails.
