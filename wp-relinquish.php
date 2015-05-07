@@ -32,8 +32,12 @@ function wp_relinquish_json_prepare_post($_post, $post) {
     $_post['acf_fields'] = $fields;
   }
 
-  if ('page' == $post['post_type'] && isset($post['page_template'])) {
-    $_post['template'] = str_replace( '.php', '', $post['page_template'] );
+  if ('page' == $post['post_type']) {
+    if  (isset($post['page_template'])) {
+      $_post['template'] = str_replace( '.php', '', $post['page_template'] );
+    } elseif ($template = get_post_meta( $post['ID'], '_wp_page_template', true )) {
+      $_post['template'] = str_replace( '.php', '', $template );
+    }
   }
 
   if ($_post['type'] == 'attachment') {
