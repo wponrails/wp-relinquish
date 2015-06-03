@@ -68,6 +68,25 @@ class Plugin {
     add_action('edit_term', [$this, 'save_term'], 10, 3);
     add_action('create_term', [$this, 'save_term'], 10, 3);
     add_action('delete_term', [$this, 'delete_term'], 10, 3);
+
+    // adminbar url fix
+    add_action('wp_before_admin_bar_render', [$this, 'before_admin_bar_render']);
+  }
+
+  public function before_admin_bar_render() {
+    // adminbar uses a global...
+    global $wp_admin_bar;
+
+    // remove the menu item because it uses home_url() by default
+    $wp_admin_bar->remove_node('view-site');
+
+    // add the menu item again with the correct frontend url
+    $wp_admin_bar->add_menu( array(
+      'parent' => 'site-name',
+      'id'     => 'view-site',
+      'title'  => __( 'Visit Site' ),
+      'href'   => RELINQUISH_FRONTEND,
+    ) );
   }
 
   public function synch_post_types() {
@@ -81,7 +100,7 @@ class Plugin {
     $post = get_post($post_id);
     return $this->save_post($post_id, $post);
   }
-  
+
   public function save_post($post_id, $post) {
     if ($post->post_status == 'auto-draft') {
       return false;
