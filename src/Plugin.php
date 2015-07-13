@@ -68,6 +68,11 @@ class Plugin {
     add_action('edit_term', [$this, 'save_term'], 10, 3);
     add_action('create_term', [$this, 'save_term'], 10, 3);
     add_action('delete_term', [$this, 'delete_term'], 10, 3);
+
+    // hook into redirection plugin
+    add_action('redirection_redirect_after_create', [$this, 'save_redirect']);
+    add_action('redirection_redirect_after_update', [$this, 'save_redirect']);
+    add_action('redirection_redirect_after_delete', [$this, 'delete_redirect']);
   }
 
   public function synch_post_types() {
@@ -81,7 +86,7 @@ class Plugin {
     $post = get_post($post_id);
     return $this->save_post($post_id, $post);
   }
-  
+
   public function save_post($post_id, $post) {
     if ($post->post_status == 'auto-draft') {
       return false;
@@ -195,6 +200,15 @@ class Plugin {
     return true;
   }
 
+  public function save_redirect($id) {
+    return $this->fire_webhook('POST', $this->relinqish_to."redirect/", ['ID' => $id]);
+  }
+
+  public function delete_redirect($id) {
+    $client = new Client();
+    return $client->delete($this->relinqish_to."redirect/{$id}?api_key=".WP_CONNECTOR_API_KEY);
+  }
+
   /**
    * @param string $method
    * @param string $endpoint
@@ -230,6 +244,8 @@ class Plugin {
       // add filter to transport this error across the redirect
       add_filter('redirect_post_location', array($this, 'add_notice_query_var'));
     }
+
+    return true;
   }
 
   public function set_page_link($url, $page_id) {
