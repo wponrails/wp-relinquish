@@ -71,6 +71,11 @@ class Plugin {
 
     // adminbar url fix
     add_action('wp_before_admin_bar_render', [$this, 'before_admin_bar_render']);
+
+    // hook into redirection plugin
+    add_action('redirection_redirect_after_create', [$this, 'save_redirect']);
+    add_action('redirection_redirect_after_update', [$this, 'save_redirect']);
+    add_action('redirection_redirect_after_delete', [$this, 'delete_redirect']);
   }
 
   public function before_admin_bar_render() {
@@ -87,6 +92,7 @@ class Plugin {
       'title'  => __( 'Visit Site' ),
       'href'   => RELINQUISH_FRONTEND,
     ) );
+
   }
 
   public function synch_post_types() {
@@ -214,6 +220,15 @@ class Plugin {
     return true;
   }
 
+  public function save_redirect($id) {
+    return $this->fire_webhook('POST', $this->relinqish_to."redirect/", ['ID' => $id]);
+  }
+
+  public function delete_redirect($id) {
+    $client = new Client();
+    return $client->delete($this->relinqish_to."redirect/{$id}?api_key=".WP_CONNECTOR_API_KEY);
+  }
+
   /**
    * @param string $method
    * @param string $endpoint
@@ -249,6 +264,8 @@ class Plugin {
       // add filter to transport this error across the redirect
       add_filter('redirect_post_location', array($this, 'add_notice_query_var'));
     }
+
+    return true;
   }
 
   public function set_page_link($url, $page_id) {
