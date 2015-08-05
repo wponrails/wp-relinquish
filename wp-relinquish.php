@@ -26,6 +26,10 @@ function wp_relinquish_json_prepare_post($_post, $post) {
     return $_post;
   }
 
+  $previous_post = $GLOBALS['post'];
+
+  $GLOBALS['post'] = get_post($post['ID']);
+
   $_post['acf_fields'] = [];
 
   if ($fields = get_fields($post['ID'])) {
@@ -64,6 +68,8 @@ function wp_relinquish_json_prepare_post($_post, $post) {
   );
 
   $_post['seo_fields'] = $seoMeta;
+
+  $GLOBALS['post'] = $previous_post;
 
   return $_post;
 }
