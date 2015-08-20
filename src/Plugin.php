@@ -81,7 +81,7 @@ class Plugin {
     $post = get_post($post_id);
     return $this->save_post($post_id, $post);
   }
-  
+
   public function save_post($post_id, $post) {
     if ($post->post_status == 'auto-draft') {
       return false;
@@ -177,11 +177,15 @@ class Plugin {
   }
 
   public function save_term($term_id, $tt_id, $taxonomy) {
+    if($taxonomy == 'post_translations') {
+        return false;
+    }
+
     $taxonomy = $this->standardize_taxonomy_name($taxonomy);
 
     $this->fire_webhook('POST', $this->relinqish_to."{$taxonomy}/", [
       'ID' => $term_id,
-      ]);
+    ]);
 
     return true;
   }
