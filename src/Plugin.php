@@ -159,7 +159,6 @@ class Plugin {
   }
 
   public function after_trash_post($post_id) {
-
     if (wp_is_post_revision($post_id)) {
       return false;
     }
@@ -191,6 +190,10 @@ class Plugin {
   }
 
   public function delete_term($term_id, $tt_id, $taxonomy) {
+    if($taxonomy == 'post_translations') {
+        return;
+    }
+
     $taxonomy = $this->standardize_taxonomy_name($taxonomy);
 
     $client = new Client();
