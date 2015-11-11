@@ -53,6 +53,7 @@ class Plugin {
     // content editing actions
     add_action('insert_post', [$this, 'save_post'], 10, 3);
     add_action('save_post', [$this, 'save_post'], 10, 3);
+    add_action('publish_to_draft', [$this, 'save_post']);
     add_action('edit_attachment', [$this, 'save_media']);
 
     add_action('trashed_post', [$this, 'after_trash_post']);
