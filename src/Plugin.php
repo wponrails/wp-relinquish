@@ -107,6 +107,12 @@ class Plugin {
     return $this->save_post($post_id, $post);
   }
 
+  public function unpublish_post($post_id, $post) {
+    $this->fire_webhook('POST', $this->relinqish_to."{$post->post_type}/{$post_id}/unpublish", []);
+
+    return true;
+  }
+
   public function save_post($post_id, $post) {
     if ($post->post_status == 'auto-draft') {
       return false;
@@ -124,11 +130,15 @@ class Plugin {
       return false;
     }
 
-    $this->fire_webhook('POST', $this->relinqish_to."{$post->post_type}/", [
-      'ID' => $post_id,
-      'preview' => in_array($post->post_status, ['draft', 'pending']),
-      ]);
-
+    if ($post->post_status == 'draft') {
+      $this->unpublish_post($post_id, $post);
+    } else {
+      $this->fire_webhook('POST', $this->relinqish_to."{$post->post_type}/", [
+        'ID' => $post_id,
+        'preview' => in_array($post->post_status, ['draft', 'pending']),
+        ]);
+    }
+    
     return true;
   }
 
