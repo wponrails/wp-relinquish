@@ -45,6 +45,7 @@ function wp_relinquish_json_prepare_post($_post, $post) {
   }
 
   $seo_title = get_post_meta($post['ID'], '_yoast_wpseo_title', true);
+  $social_options = get_option('wpseo_social');
 
   $seoMeta = array(
     'focuskw'              => get_post_meta($post['ID'], '_yoast_wpseo_focuskw', true),
@@ -61,6 +62,11 @@ function wp_relinquish_json_prepare_post($_post, $post) {
     'og-title'             => get_post_meta($post['ID'], '_yoast_wpseo_opengraph-title', true),
     'og-description'       => get_post_meta($post['ID'], '_yoast_wpseo_opengraph-description', true),
     'og-image'             => get_post_meta($post['ID'], '_yoast_wpseo_opengraph-image', true),
+    'twitter-card'         => $social_options['twitter_card_type'],
+    'twitter-site'         => $social_options['twitter_site'],
+    'twitter-title'        => get_post_meta($post['ID'], '_yoast_wpseo_twitter-title', true),
+    'twitter-description'  => get_post_meta($post['ID'], '_yoast_wpseo_twitter-description', true),
+    'twitter-image'        => get_post_meta($post['ID'], '_yoast_wpseo_twitter-image', true),
   );
 
   $_post['seo_fields'] = $seoMeta;
