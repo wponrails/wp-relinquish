@@ -130,6 +130,11 @@ class Plugin {
       return false;
     }
 
+    # Make sure to not update in Rails when a new 'draft' post is added to WP
+    if ($post->post_status == 'draft' && $post->post_date == $post->post_modified) {
+      return false;
+    }
+
     if ($post->post_status == 'draft') {
       $this->unpublish_post($post_id, $post);
     } else {
@@ -138,7 +143,7 @@ class Plugin {
         'preview' => in_array($post->post_status, ['draft', 'pending']),
         ]);
     }
-    
+
     return true;
   }
 
