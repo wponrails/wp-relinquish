@@ -136,14 +136,10 @@ class Plugin {
       return false;
     }
 
-    if ($post->post_status == 'draft') {
-      $this->unpublish_post($post_id, $post);
-    } else {
-      $this->fire_webhook('POST', $this->relinqish_to."{$post->post_type}/", [
-        'ID' => $post_id,
-        'preview' => in_array($post->post_status, ['draft', 'pending']),
-        ]);
-    }
+    $this->fire_webhook('POST', $this->relinqish_to."{$post->post_type}/", [
+      'ID' => $post_id,
+      'preview' => apply_filters('is_preview_post', $post),
+    ]);
 
     return true;
   }
