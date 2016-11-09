@@ -56,6 +56,7 @@ class Plugin {
     add_action('edit_attachment', [$this, 'save_media']);
 
     add_action('trashed_post', [$this, 'after_trash_post']);
+    add_action('deleted_post', [$this, 'after_delete_post']);
 
     // hook attachments
     add_action('edit_attachment', [$this, 'save_attachment']);
@@ -211,7 +212,26 @@ class Plugin {
     }
 
     $client = new Client();
-    $client->delete($this->relinqish_to."{$post->post_type}/".$post_id.'?api_key='.WP_CONNECTOR_API_KEY);
+    $client->delete($this->relinqish_to."{$post->post_type}/".$post_id.'?api_key='.WP_CONNECTOR_API_KEY.'&status='.$post->post_status);
+
+    return true;
+  }
+
+  public function after_delete_post($post_id) {
+
+    if (wp_is_post_revision($post_id)) {
+      return false;
+    }
+
+    $post = get_post($post_id);
+
+    if ( ! in_array($post->post_type, $this->synched_types)) {
+      return false;
+    }
+
+    $client = new Client();
+    // NOTE: The post_status for permanently deleted posts is blank
+    $client->delete($this->relinqish_to."{$post->post_type}/".$post_id.'?api_key='.WP_CONNECTOR_API_KEY.'&status=delete');
 
     return true;
   }
