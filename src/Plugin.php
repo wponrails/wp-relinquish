@@ -140,8 +140,8 @@ class Plugin {
     } else {
       $this->fire_webhook('POST', $this->relinqish_to."{$post->post_type}/", [
         'ID' => $post_id,
-        'preview' => in_array($post->post_status, ['draft', 'pending']),
-        ]);
+        'preview' => in_array($post->post_status, ['future', 'pending']),
+      ]);
     }
 
     return true;
