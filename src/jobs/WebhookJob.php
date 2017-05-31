@@ -6,13 +6,13 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 
 class WebhookJob extends \OutofSight\Job {
-  public function perform($args) {
+  public function perform($method, $url, $params = []) {
     $client = new Client();
-    $request = $client->createRequest($args['method'], $args['url']);
+    $request = $client->createRequest($method, $url);
     $request_body = $request->getBody();
 
-    if ( ! empty($args['params'])) {
-      foreach ($args['params'] as $key => $value) {
+    if ( ! empty($params)) {
+      foreach ($params as $key => $value) {
         $request_body->setField($key, $value);
       }
     }
