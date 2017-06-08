@@ -108,7 +108,14 @@ class Plugin {
   }
 
   public function unpublish_post($post_id, $post) {
-    $this->fire_webhook('POST', $this->relinqish_to."{$post->post_type}/{$post_id}/unpublish", []);
+    if (class_exists('OutOfSight')) {
+      Jobs\WebhookJob::perform_later([
+        'method' => 'POST',
+        'url' => $this->relinqish_to."{$post->post_type}/{$post_id}/unpublish",
+      ]);
+    } else {
+      $this->fire_webhook('POST', $this->relinqish_to."{$post->post_type}/{$post_id}/unpublish", []);
+    }
 
     return true;
   }
@@ -138,10 +145,18 @@ class Plugin {
     if ($post->post_status == 'draft') {
       $this->unpublish_post($post_id, $post);
     } else {
-      $this->fire_webhook('POST', $this->relinqish_to."{$post->post_type}/", [
+      if (class_exists('OutOfSight')) {
+        Jobs\WebhookJob::perform_later([
+          'method' => 'POST',
+          'url' => $this->relinqish_to."{$post->post_type}/",
+          'params' => [ 'ID' => $post->ID ]
+        ]);
+      } else {
+        $this->fire_webhook('POST', $this->relinqish_to."{$post->post_type}/", [
         'ID' => $post_id,
         'preview' => in_array($post->post_status, ['draft', 'pending']),
         ]);
+      }
     }
 
     return true;
