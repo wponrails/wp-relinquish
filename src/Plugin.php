@@ -138,7 +138,7 @@ class Plugin {
     }
 
     # Make sure to not update in Rails when a new 'draft' post is added to WP
-    if ($post->post_status == 'draft' && $post->post_date == $post->post_modified) {
+    if ($post->post_status == 'future' || ($post->post_status == 'draft' && $post->post_date == $post->post_modified)) {
       return false;
     }
 
